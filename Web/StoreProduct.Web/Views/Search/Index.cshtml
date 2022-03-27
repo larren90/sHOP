@@ -1,0 +1,29 @@
+﻿@model List<ProductModel>
+
+<table class="table table-sm table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Номер</th>
+            <th scope="col">Название</th>
+            <th scope="col">Производитель</th>
+            <th scope="col">Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(int i=0; i<Model.Count; i++)
+        {
+            <tr>
+                <td>@(i+1)</td>
+                <td><a href="@Url.Action(nameof(InfoController.InfoProduct),"Info",new { id = Model[i].ProductId})">@Model[i].ProductTitle</a></td>
+                <td><a href="@Url.Action(nameof(InfoController.InfoManufacture),"Info", new { id = Model[i].MakerId})" >@Model[i].MakerTitle</a></td>
+                <td>@Model[i].Price</td>
+                <td>
+                    <form action="@Url.Action(nameof(InfoController.InfoProduct),"Info")">
+                        <input type="hidden" name="id" value="@Model[i].ProductId"/>
+                        <button class="btn btn-success" type="submit">Подробнее о продукте</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

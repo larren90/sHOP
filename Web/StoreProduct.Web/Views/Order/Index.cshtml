@@ -1,0 +1,69 @@
+﻿@model OrderModel
+
+<table class="table table-sm table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">№</th>
+            <th scope="col">Название</th>
+            <th scope="col">Производитель</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Цена</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Items.Count; i++)
+        {
+        <tr>
+            <td class="text-right">@(i+1)</td>
+            <td><a  href="@Url.Action(nameof(InfoController.InfoProduct),"Info", new { id = Model.Items[i].Id })">@Model.Items[i].Title</a></td>
+            <td><a href="@Url.Action(nameof(InfoController.InfoManufacture),"Info",new { id = Model.Items[i].MakerId })">@Model.Items[i].MakerTitle</a></td>
+            <td class="text-center">@Model.Items[i].Count</td>
+            <td class="text-right">@Model.Items[i].Price</td>
+            <td class="form-in">
+                <form class="col-form-inline" action="@Url.Action(nameof(OrderController.RemoveItem),"Order")" method="post">
+                    <input type="hidden" name="id" value="@Model.Items[i].Id" />
+                    <button class="btn btn-danger" type="submit">Удалить</button>
+                </form>
+            </td>
+            <td class="form-in">
+                <form class="col-form-inline" action="@Url.Action(nameof(OrderController.RemoveProduct),"Order")" method="post">
+                    <input type="hidden" name="id" value="@Model.Items[i].Id" />
+                    <button class="btn btn-danger" type="submit">Удалить всё</button>
+                </form>
+            </td>
+        </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Итого</td>
+            <td class="text-center">@Model.TotalCount</td>
+            <td class="text-right">@Model.TotalPrice</td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<form action="@Url.Action(nameof(OrderController.SendConfirmation))" method="post">
+    <div>
+        <label for="cellPhone">Номер телефона</label>
+        <input class="form-group" type="text" name="cellPhone" value="+79876543210" />
+        @if (Model.Errors.ContainsKey("cellPhone"))
+        {
+            <small class="text-danger">@Model.Errors["cellPhone"]</small>
+        }
+    </div>
+
+    <div>
+        <label for="email">Электронная почта</label>
+        <input class="form-group" type="text" name="email" value="gusakseva8@gmail.com" />
+        @if(Model.Errors.ContainsKey("email"))
+        {
+            <small class="text-danger">@Model.Errors["email"]</small>
+        }
+    </div>
+    
+
+    <button class="btn btn-success">Оформить заказ</button> 
+</form>
+
